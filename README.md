@@ -1,4 +1,7 @@
 # ROK_ARMY_AUTO_COMMUTE_SYSTEM
+```text
+    해당 프로젝트는 KT 비즈메카 시스템은 ERP로 사용하는 회사 대상으로 동작을 지원하는 자동 출퇴근 기록 프로그램입니다.
+```
 
 ## Program Info
 ```text
