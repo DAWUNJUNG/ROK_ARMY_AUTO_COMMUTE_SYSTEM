@@ -10,10 +10,13 @@ from selenium.webdriver.common.alert import Alert
 from datetime import datetime, timedelta
 import requests
 import json
+import smtplib
+from email.mime.text import MIMEText
 
 
 def get_annual_info():
-    logfile.write("check vacation from KTbizmeka start \n")
+    global log_message
+    log_message = log_message + "KTbizmeka 휴가 정보 불러오기 시작 \n"
 
     options = {
         'https': 'proxy detail',
@@ -82,37 +85,38 @@ def get_annual_info():
                 }
 
     browser.quit()
-    logfile.write("check vacation from KTbizmeka end \n")
+    log_message = log_message + "KTbizmeka 휴가 정보 불러오기 종료 \n"
 
 def work_time_check():
-    logfile.write("work time check start\n")
+    global log_message
+    log_message = log_message + "근무 시간 검증 시작\n"
 
-    logfile.write("get ROK holiday from CommonDataPortal start\n")
+    log_message = log_message + "공공데이터포털 공휴일 데이터 호출 시작\n"
     # 공공데이터포털에서 공휴일 가져오기
     today = datetime.today().strftime('%Y')
     key = '7K8B2%2FjwUiPJygVIZ9ZUzlnsl%2BYxxv230EFP2s5MbrvsVE4Ua5OcUqe4jHzh78Royi8hrFCw39pAVI%2Bdlf1Yaw%3D%3D'
     url = 'http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?_type=json&numOfRows=1000&solYear=' + str(
         today) + '&ServiceKey=' + str(key)
     response = requests.get(url)
-    logfile.write("get ROK holiday from CommonDataPortal end\n")
+    log_message = log_message + "공공데이터포털 공휴일 데이터 호출 완료\n"
 
     if response.status_code == 200:
-        logfile.write("get ROK holiday from CommonDataPortal success\n")
+        log_message = log_message + "공공데이터 포털 공휴일 데이터 호출 성공\n"
 
-        logfile.write("ROK holiday data processing start\n")
+        log_message = log_message + "휴무일 데이터 가공 시작\n"
         json_ob = json.loads(response.text)
         holidays_data = json_ob['response']['body']['items']['item']
         for info in holidays_data:
             holiday_list[datetime.strptime(str(info['locdate']), '%Y%m%d').strftime('%Y-%m-%d')] = {
                 "type": "full_day"
             }
-        logfile.write("ROK holiday data processing end\n")
+        log_message = log_message + "휴무일 데이터 가공 종료\n"
 
         now_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         now_date = datetime.strptime(now_datetime, '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d')
         now_time = datetime.strptime(now_datetime, '%Y-%m-%d %H:%M:%S').strftime('%H:%M:%S')
         if not now_date in holiday_list:
-            logfile.write("holiday type : no holiday\n")
+            log_message = log_message + "근무 타입 : 근무일\n"
 
             # 출퇴근시간 타입 구분
             go_work_time = datetime.now().strptime('10:00:00', '%H:%M:%S').strftime('%H:%M:%S')
@@ -123,10 +127,10 @@ def work_time_check():
             elif (now_time > go_home_time):
                 return 'home'
         else:
-            holiday_type = "full_day"
+            holiday_type = "연차"
 
             if holiday_list[now_date]['type'] == 'morning':
-                holiday_type = "morning"
+                holiday_type = "오전 반차"
 
                 # 출퇴근시간 타입 구분
                 go_work_time_first = datetime.now().strptime('14:40:00', '%H:%M:%S').strftime('%H:%M:%S')
@@ -138,23 +142,24 @@ def work_time_check():
                 elif now_time > go_home_time:
                     return 'home'
             elif holiday_list[now_date]['type'] == 'afternoon':
-                holiday_type = "afternoon"
+                holiday_type = "오후 반차"
 
                 # 출퇴근시간 타입 구분
                 go_work_time = datetime.now().strptime('10:00:00', '%H:%M:%S').strftime('%H:%M:%S')
-                go_home_time = datetime.now().strptime('14:00:00', '%H:%M:%S').strftime('%H:%M:%S')
+                go_home_time = datetime.now().strptime('15:00:00', '%H:%M:%S').strftime('%H:%M:%S')
 
                 if now_time < go_work_time:
                     return 'office'
                 elif now_time > go_home_time:
                     return 'home'
 
-            logfile.write("holiday type : " + holiday_type + "\n")
+            log_message = log_message + "근무 타입 : " + holiday_type + "\n"
 
     return 'no_commute'
 
 
 def auto_commute():
+    global log_message
     result_status = "fail"
 
     # 브라우저 설정
@@ -195,31 +200,31 @@ def auto_commute():
     WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.ID, 'onedayGolvwkMngPersView')))
 
     # 출퇴근 처리
-    logfile.write("commute processing start\n")
+    log_message = log_message + "근태 기록 시작\n"
 
     commute_type = work_time_check()
-    logfile.write("commute type : " + commute_type + "\n")
+    log_message = log_message + "출퇴근 타입 : "
     if commute_type == 'office':
+        log_message = log_message + "출근\n"
         browser.find_element(By.ID, 'btnGoOffice').click()
         alert = Alert(browser)
         alert_text = alert.text
-        logfile.write("result alert content : " + alert_text + "\n")
         if '하시겠습니까?' in alert_text:
-            result_status = "office success"
+            result_status = "출근 처리 완료"
         alert.accept()
     elif commute_type == 'home':
+        log_message = log_message + "퇴근\n"
         browser.find_element(By.ID, 'btnGoHome').click()
         alert = Alert(browser)
         alert_text = alert.text
-        logfile.write("result alert content : " + alert_text + "\n")
         if '하시겠습니까?' in alert_text:
-            result_status = "home success"
+            result_status = "퇴근 처리 완료"
         alert.accept()
 
-    logfile.write("commute processing result status : " + result_status + "\n")
-    logfile.write("commute processing end\n")
-    logfile.write("service end (" + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ")\n\n\n\n\n")
-    logfile.close()
+    log_message = log_message + "근태 기록 결과 : " + result_status + "\n"
+    log_message = log_message + "근태 기록 종료\n"
+    log_message = log_message + "프로세스 종료 시간 : " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "\n"
+    log_message = log_message + "근태 기록 자동화 종료\n\n\n\n\n"
 
     # 디버그용
     # while (True):
@@ -228,13 +233,29 @@ def auto_commute():
     browser.quit()
 
 
+def log_mail_send(result_message):
+    smtp = smtplib.SMTP('smtp.gmail.com', 587)
+    smtp.starttls()  # TLS 사용시 필요
+    smtp.login(os.environ.get('GOOGLE_ID'), os.environ.get('GOOGLE_APP_PW'))
+
+    msg = MIMEText(result_message)
+    msg['Subject'] = '근태 자동화 도구 동작 결과 안내 (' + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ')'
+    smtp.sendmail(os.environ.get('SOURCE_EMAIL'), os.environ.get('DESTINATION_EMAIL'), msg.as_string())
+
+    smtp.quit()
+
 if __name__ == "__main__":
+    global log_message
+    log_message = ""
+
     ##환경변수 파일 호출
     load_dotenv()
 
     # 로그파일 오픈
     logfile = open('C:\\ROK_ARMY_AUTO_COMMUTE_SYSTEM\log\\' + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a', encoding="UTF-8")
-    logfile.write("service start (" + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ") \n")
+    log_message = log_message + "근태 기록 자동화 시작\n"
+    log_message = log_message + "프로세스 시작 시간 : " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "\n"
+    log_message = log_message + "Made By Dawun (github : https://github.com/DAWUNJUNG)\n"
 
     # 휴무일 데이터 호출
     holiday_list = {}
@@ -242,3 +263,8 @@ if __name__ == "__main__":
 
     # 출퇴근 기록 프로세스
     auto_commute()
+
+    # 결과 메일 발송 프로세스
+    logfile.write(log_message)
+    logfile.close()
+    # log_mail_send(log_message)

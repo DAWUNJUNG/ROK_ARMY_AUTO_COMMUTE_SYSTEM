@@ -53,7 +53,6 @@
     1 19 * * 1-5  DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
 ```
 
-
 ## Requeired env setting value
 ```text
     KT_BIZMEKA_COOKIE_NAME="휴대전화 인증 후 발급된 쿠키 이름"
@@ -61,4 +60,12 @@
     KT_BIZMEKA_ID="비즈메카 아이디"
     KT_BIZMEKA_PW="비즈메카 비밀번호"
     KT_BIZMEKA_PW_CHANGE="비밀번호 변경 대처용 비밀번호"  //비밀번호 변경 시즌이 되면 KT_BIZMEKA_PW와 KT_BIZMEKA_PW_CHANGE가 변경되어 비밀번호를 변경합니다
+    // 기능 활성화시 사용 가능
+    GOOGLE_ID="구글 계정"
+    GOOGLE_APP_PW="구글 앱 비밀번호"
+    SOURCE_EMAIL="발신 EMAIL 주소"
+    DESTINATION_EMAIL="수신 EMAIL 주소"
 ```
+
+## GOOGLE APP PASSWORD
+[도움말 링크](https://support.google.com/accounts/answer/185833?hl=ko)
