@@ -33,7 +33,7 @@ def get_annual_info():
 
     # 비즈메카 열기
     browser.get('https://ezsso.bizmeka.com/loginForm.do')
-    browser.implicitly_wait(10)
+    browser.implicitly_wait(5)
 
     # 인증 쿠키 유지설정
     browser.add_cookie({
@@ -48,7 +48,7 @@ def get_annual_info():
 
     # 비즈메카 휴가신청 이동
     browser.get('https://ezkhuman.bizmeka.com/product/outlnk.do?code=PA02')
-    browser.implicitly_wait(10)
+    browser.implicitly_wait(5)
 
     request = browser.wait_for_request('.*/getApplVctnList.*')
     request_data = json.loads(request.response.body.decode('utf-8'))
@@ -83,7 +83,7 @@ def get_annual_info():
                 holiday_list[end_date] = {
                     "type": "afternoon"
                 }
-
+    browser.implicitly_wait(5)
     browser.quit()
     log_message = log_message + "KTbizmeka 휴가 정보 불러오기 종료 \n"
 
@@ -173,7 +173,7 @@ def auto_commute():
 
     # 비즈메카 열기
     browser.get('https://ezsso.bizmeka.com/loginForm.do')
-    browser.implicitly_wait(10)
+    browser.implicitly_wait(5)
 
     # 인증 쿠키 유지설정
     browser.add_cookie({
@@ -211,6 +211,7 @@ def auto_commute():
         alert_text = alert.text
         if '하시겠습니까?' in alert_text:
             result_status = "출근 처리 완료"
+        browser.implicitly_wait(2)
         alert.accept()
     elif commute_type == 'home':
         log_message = log_message + "퇴근\n"
@@ -219,6 +220,7 @@ def auto_commute():
         alert_text = alert.text
         if '하시겠습니까?' in alert_text:
             result_status = "퇴근 처리 완료"
+        browser.implicitly_wait(2)
         alert.accept()
 
     log_message = log_message + "근태 기록 결과 : " + result_status + "\n"
@@ -229,7 +231,7 @@ def auto_commute():
     # 디버그용
     # while (True):
     #     pass
-
+    browser.implicitly_wait(5)
     browser.quit()
 
 
