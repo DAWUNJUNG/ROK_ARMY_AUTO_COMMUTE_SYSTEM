@@ -212,8 +212,8 @@ def auto_commute():
         log_message = log_message + "출근 기록 메시지 : " + alert_text + "\n"
         if '하시겠습니까?' in alert_text:
             result_status = "출근 처리 완료"
-        browser.implicitly_wait(2)
         alert.accept()
+        browser.implicitly_wait(5)
     elif commute_type == 'home':
         log_message = log_message + "퇴근\n"
         browser.find_element(By.ID, 'btnGoHome').click()
@@ -222,8 +222,8 @@ def auto_commute():
         log_message = log_message + "퇴근 기록 메시지 : " + alert_text + "\n"
         if '하시겠습니까?' in alert_text:
             result_status = "퇴근 처리 완료"
-        browser.implicitly_wait(2)
         alert.accept()
+        browser.implicitly_wait(5)
 
     log_message = log_message + "근태 기록 결과 : " + result_status + "\n"
     log_message = log_message + "근태 기록 종료\n"
