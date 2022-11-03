@@ -209,6 +209,7 @@ def auto_commute():
         browser.find_element(By.ID, 'btnGoOffice').click()
         alert = Alert(browser)
         alert_text = alert.text
+        log_message = log_message + "출근 기록 메시지 : " + alert_text + "\n"
         if '하시겠습니까?' in alert_text:
             result_status = "출근 처리 완료"
         browser.implicitly_wait(2)
@@ -218,6 +219,7 @@ def auto_commute():
         browser.find_element(By.ID, 'btnGoHome').click()
         alert = Alert(browser)
         alert_text = alert.text
+        log_message = log_message + "퇴근 기록 메시지 : " + alert_text + "\n"
         if '하시겠습니까?' in alert_text:
             result_status = "퇴근 처리 완료"
         browser.implicitly_wait(2)
