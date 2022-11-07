@@ -271,4 +271,4 @@ if __name__ == "__main__":
     # 결과 메일 발송 프로세스
     logfile.write(log_message)
     logfile.close()
-    log_mail_send(log_message)
+    # log_mail_send(log_message)
