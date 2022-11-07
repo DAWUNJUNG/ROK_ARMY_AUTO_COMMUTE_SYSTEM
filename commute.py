@@ -24,7 +24,6 @@ def get_annual_info():
     }
 
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('headless')
     chrome_options.add_argument('window-size=1920x1080')
     chrome_options.add_argument("disable-gpu")
     chrome_options.add_argument('lang=ko_KR')
@@ -33,7 +32,7 @@ def get_annual_info():
 
     # 비즈메카 열기
     browser.get('https://ezsso.bizmeka.com/loginForm.do')
-    browser.implicitly_wait(5)
+    browser.implicitly_wait(30)
 
     # 인증 쿠키 유지설정
     browser.add_cookie({
@@ -48,7 +47,7 @@ def get_annual_info():
 
     # 비즈메카 휴가신청 이동
     browser.get('https://ezkhuman.bizmeka.com/product/outlnk.do?code=PA02')
-    browser.implicitly_wait(5)
+    browser.implicitly_wait(30)
 
     request = browser.wait_for_request('.*/getApplVctnList.*')
     request_data = json.loads(request.response.body.decode('utf-8'))
@@ -83,7 +82,7 @@ def get_annual_info():
                 holiday_list[end_date] = {
                     "type": "afternoon"
                 }
-    browser.implicitly_wait(5)
+    browser.implicitly_wait(30)
     browser.quit()
     log_message = log_message + "KTbizmeka 휴가 정보 불러오기 종료 \n"
 
@@ -164,7 +163,6 @@ def auto_commute():
 
     # 브라우저 설정
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('headless')
     chrome_options.add_argument('window-size=1920x1080')
     chrome_options.add_argument("disable-gpu")
     chrome_options.add_argument('lang=ko_KR')
@@ -173,7 +171,7 @@ def auto_commute():
 
     # 비즈메카 열기
     browser.get('https://ezsso.bizmeka.com/loginForm.do')
-    browser.implicitly_wait(5)
+    browser.implicitly_wait(30)
 
     # 인증 쿠키 유지설정
     browser.add_cookie({
@@ -213,7 +211,7 @@ def auto_commute():
         if '하시겠습니까?' in alert_text:
             result_status = "출근 처리 완료"
         alert.accept()
-        browser.implicitly_wait(5)
+        browser.implicitly_wait(30)
     elif commute_type == 'home':
         log_message = log_message + "퇴근\n"
         browser.find_element(By.ID, 'btnGoHome').click()
@@ -223,7 +221,7 @@ def auto_commute():
         if '하시겠습니까?' in alert_text:
             result_status = "퇴근 처리 완료"
         alert.accept()
-        browser.implicitly_wait(5)
+        browser.implicitly_wait(30)
 
     log_message = log_message + "근태 기록 결과 : " + result_status + "\n"
     log_message = log_message + "근태 기록 종료\n"
@@ -233,7 +231,7 @@ def auto_commute():
     # 디버그용
     # while (True):
     #     pass
-    browser.implicitly_wait(5)
+    browser.implicitly_wait(30)
     browser.quit()
 
 
@@ -271,4 +269,4 @@ if __name__ == "__main__":
     # 결과 메일 발송 프로세스
     logfile.write(log_message)
     logfile.close()
-    # log_mail_send(log_message)
+    log_mail_send(log_message)
