@@ -12,6 +12,7 @@ import requests
 import json
 import smtplib
 from email.mime.text import MIMEText
+from time import sleep
 
 
 def get_annual_info():
@@ -213,7 +214,7 @@ def auto_commute():
         if '하시겠습니까?' in alert_text:
             result_status = "출근 처리 완료"
         alert.accept()
-        browser.implicitly_wait(30)
+        WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.ID, 'onedayGolvwkMngPersView')))
     elif commute_type == 'home':
         log_message = log_message + "퇴근\n"
         browser.find_element(By.ID, 'btnGoHome').click()
@@ -223,7 +224,7 @@ def auto_commute():
         if '하시겠습니까?' in alert_text:
             result_status = "퇴근 처리 완료"
         alert.accept()
-        browser.implicitly_wait(30)
+        WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.ID, 'onedayGolvwkMngPersView')))
 
     log_message = log_message + "근태 기록 결과 : " + result_status + "\n"
     log_message = log_message + "근태 기록 종료\n"
