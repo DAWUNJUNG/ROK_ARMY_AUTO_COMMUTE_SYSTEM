@@ -1,6 +1,7 @@
 import dotenv
 from dotenv import find_dotenv, load_dotenv
 import os
+import platform
 from selenium import webdriver
 from seleniumwire import webdriver as wired_webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -12,7 +13,18 @@ import requests
 import json
 import smtplib
 from email.mime.text import MIMEText
-from time import sleep
+
+
+def check_device_os():
+    system_os = platform.system()
+
+    if system_os == "Windows":
+        return "./chromedriver-windows.exe"
+    elif system_os == "Darwin":
+        if platform.mac_ver()[2] == "arm64":
+            return "./chromedriver-mac_arm"
+        else:
+            return "./chromedriver-mac_x86"
 
 
 def get_annual_info():
@@ -25,16 +37,17 @@ def get_annual_info():
     }
 
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('headless')
+    # chrome_options.add_argument('headless')
     chrome_options.add_argument('window-size=1920x1080')
     chrome_options.add_argument("disable-gpu")
     chrome_options.add_argument('lang=ko_KR')
 
-    browser = wired_webdriver.Chrome(executable_path='chromedriver.exe', seleniumwire_options=options, chrome_options=chrome_options)
+    browser = wired_webdriver.Chrome(executable_path=check_device_os(), seleniumwire_options=options,
+                                     chrome_options=chrome_options)
 
     # 비즈메카 열기
     browser.get('https://ezsso.bizmeka.com/loginForm.do')
-    browser.implicitly_wait(30)
+    browser.implicitly_wait(100)
 
     # 인증 쿠키 유지설정
     browser.add_cookie({
@@ -49,9 +62,9 @@ def get_annual_info():
 
     # 비즈메카 휴가신청 이동
     browser.get('https://ezkhuman.bizmeka.com/product/outlnk.do?code=PA02')
-    browser.implicitly_wait(30)
+    browser.implicitly_wait(100)
 
-    request = browser.wait_for_request('.*/getApplVctnList.*')
+    request = browser.wait_for_request('.*/getApplVctnList.*', timeout=100)
     request_data = json.loads(request.response.body.decode('utf-8'))
 
     not_approval_list = ["3", "4", "5", "6"]
@@ -68,7 +81,7 @@ def get_annual_info():
             if "전일" in data['oneHalfGbn']:
                 if start_date != end_date:
                     for i in range(diff_day):
-                        key_date = datetime.strptime(diff_start_date, "%Y%m%d") + timedelta(days=(i+1))
+                        key_date = datetime.strptime(diff_start_date, "%Y%m%d") + timedelta(days=(i + 1))
                         holiday_list[datetime.strptime(str(key_date), '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d')] = {
                             "type": "full_day"
                         }
@@ -84,9 +97,10 @@ def get_annual_info():
                 holiday_list[end_date] = {
                     "type": "afternoon"
                 }
-    browser.implicitly_wait(30)
+    browser.implicitly_wait(100)
     browser.quit()
     log_message = log_message + "KTbizmeka 휴가 정보 불러오기 종료 \n"
+
 
 def work_time_check():
     global log_message
@@ -165,16 +179,16 @@ def auto_commute():
 
     # 브라우저 설정
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('headless')
+    # chrome_options.add_argument('headless')
     chrome_options.add_argument('window-size=1920x1080')
     chrome_options.add_argument("disable-gpu")
     chrome_options.add_argument('lang=ko_KR')
 
-    browser = webdriver.Chrome(executable_path='chromedriver.exe', chrome_options=chrome_options)
+    browser = webdriver.Chrome(executable_path=check_device_os(), chrome_options=chrome_options)
 
     # 비즈메카 열기
     browser.get('https://ezsso.bizmeka.com/loginForm.do')
-    browser.implicitly_wait(30)
+    browser.implicitly_wait(100)
 
     # 인증 쿠키 유지설정
     browser.add_cookie({
@@ -231,10 +245,7 @@ def auto_commute():
     log_message = log_message + "프로세스 종료 시간 : " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "\n"
     log_message = log_message + "근태 기록 자동화 종료\n\n\n\n\n"
 
-    # 디버그용
-    # while (True):
-    #     pass
-    browser.implicitly_wait(30)
+    browser.implicitly_wait(100)
     browser.quit()
 
 
@@ -249,6 +260,7 @@ def log_mail_send(result_message):
 
     smtp.quit()
 
+
 if __name__ == "__main__":
     global log_message
     log_message = ""
@@ -257,7 +269,8 @@ if __name__ == "__main__":
     load_dotenv()
 
     # 로그파일 오픈
-    logfile = open('C:\\ROK_ARMY_AUTO_COMMUTE_SYSTEM\log\\' + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a', encoding="UTF-8")
+    logfile = open('C:\\ROK_ARMY_AUTO_COMMUTE_SYSTEM\log\\' + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a',
+                   encoding="UTF-8")
     log_message = log_message + "근태 기록 자동화 시작\n"
     log_message = log_message + "프로세스 시작 시간 : " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "\n"
     log_message = log_message + "Made By Dawun (github : https://github.com/DAWUNJUNG)\n"

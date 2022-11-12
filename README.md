@@ -6,7 +6,7 @@
 ## Program Info
 ```text
     Support OS : Windows
-                 Unix(지원예정)
+                 MacOS
     
     Use Technology : 
             - Language :
@@ -47,8 +47,8 @@
 
 #### Windows crontab
 ```text
-    50 9 * * 1-5  DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
-    50 14 * * 1-5  DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
+    40 9 * * 1-5  DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
+    40 14 * * 1-5  DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
     1 14 * * 1-5  DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
     1 19 * * 1-5  DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
 ```
