@@ -20,7 +20,8 @@
                         json
                         
             - Cron    : 
-                        nncron
+                        nncron (Windows)
+                        crontab (MacOS)
 ```
 
 
