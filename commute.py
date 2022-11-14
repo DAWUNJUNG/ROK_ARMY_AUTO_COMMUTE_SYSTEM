@@ -202,8 +202,8 @@ def auto_commute():
 
     # 인증 쿠키 유지설정
     browser.add_cookie({
-        'name': 'r4GK9DFq2vD7ofRPRoGdlh0Mi2nrl1EBkGALB2jwU',
-        'value': 'q7zHr6MQZOhvtt+sK8QEHEodcbVYdgD5xuRIwHRYyyzjZjJscHj22JxxSsV1FcFU'
+        'name': os.environ.get('KT_BIZMEKA_COOKIE_NAME'),
+        'value': os.environ.get('KT_BIZMEKA_COOKIE_VALUE')
     })
 
     # 비즈메카 로그인
