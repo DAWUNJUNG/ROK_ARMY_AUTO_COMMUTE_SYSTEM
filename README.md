@@ -56,16 +56,28 @@
 
 ## Requeired env setting value
 ```text
-    KT_BIZMEKA_COOKIE_NAME="휴대전화 인증 후 발급된 쿠키 이름"
-    KT_BIZMEKA_COOKIE_VALUE="휴대전화 인증 후 발급된 쿠키 값"
-    KT_BIZMEKA_ID="비즈메카 아이디"
-    KT_BIZMEKA_PW="비즈메카 비밀번호"
-    KT_BIZMEKA_PW_CHANGE="비밀번호 변경 대처용 비밀번호"  //비밀번호 변경 시즌이 되면 KT_BIZMEKA_PW와 KT_BIZMEKA_PW_CHANGE가 변경되어 비밀번호를 변경합니다
+    KT_BIZMEKA_COOKIE_NAME=휴대전화 인증 후 발급된 쿠키 이름
+    KT_BIZMEKA_COOKIE_VALUE=휴대전화 인증 후 발급된 쿠키 값
+    KT_BIZMEKA_ID=비즈메카 아이디
+    KT_BIZMEKA_PW=비즈메카 비밀번호
+    KT_BIZMEKA_PW_CHANGE=비밀번호 변경 대처용 비밀번호  //비밀번호 변경 시즌이 되면 KT_BIZMEKA_PW와 KT_BIZMEKA_PW_CHANGE가 변경되어 비밀번호를 변경합니다
+    LOG_DIRECTORY=로그파일을 생성할 디렉토리
+    DATA_PORTAL_KEY=공공데이터포털 KEY
     // 기능 활성화시 사용 가능
-    GOOGLE_ID="구글 계정"
-    GOOGLE_APP_PW="구글 앱 비밀번호"
-    SOURCE_EMAIL="발신 EMAIL 주소"
-    DESTINATION_EMAIL="수신 EMAIL 주소"
+    GOOGLE_ID=구글 계정
+    GOOGLE_APP_PW=구글 앱 비밀번호
+    SOURCE_EMAIL=발신 EMAIL 주소
+    DESTINATION_EMAIL=수신 EMAIL 주소
+```
+
+## DATA PORTAL KEY Generate
+[공공 데이터 포털 특일 정보 바로가기](https://www.data.go.kr/iim/api/selectAPIAcountView.do)
+```text
+    주의사항 : 2년에 한번씩 갱신 해줘야함
+    1. 공공 데이터 포털 회원가입
+    2. 공공 데이터 포털 특일 정보 페이지로 이동 (위 바로가기 클릭)
+    3. 개발 계정 및 운영 계정 전환
+    4. 일반 인증키 복사 및 env에 삽입
 ```
 
 ## GOOGLE APP PASSWORD

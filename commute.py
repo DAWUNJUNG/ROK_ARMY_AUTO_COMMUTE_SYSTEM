@@ -106,69 +106,79 @@ def work_time_check():
     global log_message
     log_message = log_message + "근무 시간 검증 시작\n"
 
-    log_message = log_message + "공공데이터포털 공휴일 데이터 호출 시작\n"
-    # 공공데이터포털에서 공휴일 가져오기
-    today = datetime.today().strftime('%Y')
-    key = '7K8B2%2FjwUiPJygVIZ9ZUzlnsl%2BYxxv230EFP2s5MbrvsVE4Ua5OcUqe4jHzh78Royi8hrFCw39pAVI%2Bdlf1Yaw%3D%3D'
-    url = 'http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?_type=json&numOfRows=1000&solYear=' + str(
-        today) + '&ServiceKey=' + str(key)
-    response = requests.get(url)
-    log_message = log_message + "공공데이터포털 공휴일 데이터 호출 완료\n"
+    # 공휴일 파일 확인
+    if os.path.isfile('holidays/' + datetime.now().strftime('%Y') + '.json'):
+        # 공휴일 파일 불러오기
+        with open('holidays/' + datetime.now().strftime('%Y') + '.json', 'r') as holiday_file:
+            holidays_data = json.load(holiday_file)
+    else:
+        log_message = log_message + "공공 데이터 포털 공휴일 데이터 호출 시작\n"
+        # 공공데이터포털에서 공휴일 가져오기
+        today = datetime.today().strftime('%Y')
+        url = 'http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?_type=json&numOfRows=1000&solYear=' + str(
+            today) + '&ServiceKey=' + str(os.environ.get('DATA_PORTAL_KEY'))
+        response = requests.get(url)
+        log_message = log_message + "공공 데이터 포털 공휴일 데이터 호출 완료\n"
 
-    if response.status_code == 200:
-        log_message = log_message + "공공데이터 포털 공휴일 데이터 호출 성공\n"
+        if response.status_code == 200:
+            log_message = log_message + "공공 데이터 포털 공휴일 데이터 호출 성공\n"
 
-        log_message = log_message + "휴무일 데이터 가공 시작\n"
-        json_ob = json.loads(response.text)
-        holidays_data = json_ob['response']['body']['items']['item']
-        for info in holidays_data:
-            holiday_list[datetime.strptime(str(info['locdate']), '%Y%m%d').strftime('%Y-%m-%d')] = {
-                "type": "full_day"
-            }
-        log_message = log_message + "휴무일 데이터 가공 종료\n"
+            json_ob = json.loads(response.text)
+            holidays_data = json_ob['response']['body']['items']['item']
+            # 공휴일 파일 생성
+            with open('holidays/' + datetime.now().strftime('%Y') + '.json', 'w') as holiday_file:
+                json.dump(holidays_data, holiday_file)
 
-        now_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        now_date = datetime.strptime(now_datetime, '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d')
-        now_time = datetime.strptime(now_datetime, '%Y-%m-%d %H:%M:%S').strftime('%H:%M:%S')
-        if not now_date in holiday_list:
-            log_message = log_message + "근무 타입 : 근무일\n"
+    # 공휴일 데이터 가공
+    log_message = log_message + "휴무일 데이터 가공 시작\n"
+    for info in holidays_data:
+        holiday_list[datetime.strptime(str(info['locdate']), '%Y%m%d').strftime('%Y-%m-%d')] = {
+            "type": "full_day"
+        }
+    log_message = log_message + "휴무일 데이터 가공 종료\n"
+
+    now_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    now_date = datetime.strptime(now_datetime, '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d')
+    now_time = datetime.strptime(now_datetime, '%Y-%m-%d %H:%M:%S').strftime('%H:%M:%S')
+    if not now_date in holiday_list:
+        log_message = log_message + "근무 타입 : 근무일\n"
+
+        # 출퇴근시간 타입 구분
+        go_work_time = datetime.now().strptime('10:00:00', '%H:%M:%S').strftime('%H:%M:%S')
+        go_home_time = datetime.now().strptime('19:00:00', '%H:%M:%S').strftime('%H:%M:%S')
+
+        if (now_time < go_work_time):
+            return 'office'
+        elif (now_time > go_home_time):
+            return 'home'
+    else:
+        holiday_type = "연차"
+
+        if holiday_list[now_date]['type'] == 'morning':
+            holiday_type = "오전 반차"
+
+            # 출퇴근시간 타입 구분
+            go_work_time_first = datetime.now().strptime('14:40:00', '%H:%M:%S').strftime('%H:%M:%S')
+            go_work_time_second = datetime.now().strptime('15:00:00', '%H:%M:%S').strftime('%H:%M:%S')
+            go_home_time = datetime.now().strptime('19:00:00', '%H:%M:%S').strftime('%H:%M:%S')
+
+            if now_time > go_work_time_first and now_time < go_work_time_second:
+                return 'office'
+            elif now_time > go_home_time:
+                return 'home'
+        elif holiday_list[now_date]['type'] == 'afternoon':
+            holiday_type = "오후 반차"
 
             # 출퇴근시간 타입 구분
             go_work_time = datetime.now().strptime('10:00:00', '%H:%M:%S').strftime('%H:%M:%S')
-            go_home_time = datetime.now().strptime('19:00:00', '%H:%M:%S').strftime('%H:%M:%S')
+            go_home_time = datetime.now().strptime('15:00:00', '%H:%M:%S').strftime('%H:%M:%S')
 
-            if (now_time < go_work_time):
+            if now_time < go_work_time:
                 return 'office'
-            elif (now_time > go_home_time):
+            elif now_time > go_home_time:
                 return 'home'
-        else:
-            holiday_type = "연차"
 
-            if holiday_list[now_date]['type'] == 'morning':
-                holiday_type = "오전 반차"
-
-                # 출퇴근시간 타입 구분
-                go_work_time_first = datetime.now().strptime('14:40:00', '%H:%M:%S').strftime('%H:%M:%S')
-                go_work_time_second = datetime.now().strptime('15:00:00', '%H:%M:%S').strftime('%H:%M:%S')
-                go_home_time = datetime.now().strptime('19:00:00', '%H:%M:%S').strftime('%H:%M:%S')
-
-                if now_time > go_work_time_first and now_time < go_work_time_second:
-                    return 'office'
-                elif now_time > go_home_time:
-                    return 'home'
-            elif holiday_list[now_date]['type'] == 'afternoon':
-                holiday_type = "오후 반차"
-
-                # 출퇴근시간 타입 구분
-                go_work_time = datetime.now().strptime('10:00:00', '%H:%M:%S').strftime('%H:%M:%S')
-                go_home_time = datetime.now().strptime('15:00:00', '%H:%M:%S').strftime('%H:%M:%S')
-
-                if now_time < go_work_time:
-                    return 'office'
-                elif now_time > go_home_time:
-                    return 'home'
-
-            log_message = log_message + "근무 타입 : " + holiday_type + "\n"
+        log_message = log_message + "근무 타입 : " + holiday_type + "\n"
 
     return 'no_commute'
 
@@ -269,8 +279,7 @@ if __name__ == "__main__":
     load_dotenv()
 
     # 로그파일 오픈
-    logfile = open('C:\\ROK_ARMY_AUTO_COMMUTE_SYSTEM\log\\' + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a',
-                   encoding="UTF-8")
+    logfile = open(str(os.environ.get('LOG_DIRECTORY')) + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a', encoding="UTF-8")
     log_message = log_message + "근태 기록 자동화 시작\n"
     log_message = log_message + "프로세스 시작 시간 : " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "\n"
     log_message = log_message + "Made By Dawun (github : https://github.com/DAWUNJUNG)\n"
@@ -282,7 +291,9 @@ if __name__ == "__main__":
     # 출퇴근 기록 프로세스
     auto_commute()
 
-    # 결과 메일 발송 프로세스
+    # 결과 로그 파일 생성
     logfile.write(log_message)
     logfile.close()
+
+    # 결과 메일 발송 프로세스
     # log_mail_send(log_message)
