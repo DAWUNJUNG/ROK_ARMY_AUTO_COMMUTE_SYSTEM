@@ -62,6 +62,7 @@
     KT_BIZMEKA_PW=비즈메카 비밀번호
     KT_BIZMEKA_PW_CHANGE=비밀번호 변경 대처용 비밀번호  //비밀번호 변경 시즌이 되면 KT_BIZMEKA_PW와 KT_BIZMEKA_PW_CHANGE가 변경되어 비밀번호를 변경합니다
     LOG_DIRECTORY=로그파일을 생성할 디렉토리
+    HOLIDAY_DIRECTORY=공휴일 데이터 저장 디렉토리
     DATA_PORTAL_KEY=공공데이터포털 KEY
     // 기능 활성화시 사용 가능
     GOOGLE_ID=구글 계정

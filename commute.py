@@ -107,9 +107,9 @@ def work_time_check():
     log_message = log_message + "근무 시간 검증 시작\n"
 
     # 공휴일 파일 확인
-    if os.path.isfile('holidays/' + datetime.now().strftime('%Y') + '.json'):
+    if os.path.isfile(os.environ.get('HOLIDAY_DIRECTORY') + datetime.now().strftime('%Y') + '.json'):
         # 공휴일 파일 불러오기
-        with open('holidays/' + datetime.now().strftime('%Y') + '.json', 'r') as holiday_file:
+        with open(os.environ.get('HOLIDAY_DIRECTORY') + datetime.now().strftime('%Y') + '.json', 'r') as holiday_file:
             holidays_data = json.load(holiday_file)
     else:
         log_message = log_message + "공공 데이터 포털 공휴일 데이터 호출 시작\n"
@@ -126,7 +126,7 @@ def work_time_check():
             json_ob = json.loads(response.text)
             holidays_data = json_ob['response']['body']['items']['item']
             # 공휴일 파일 생성
-            with open('holidays/' + datetime.now().strftime('%Y') + '.json', 'w') as holiday_file:
+            with open(os.environ.get('HOLIDAY_DIRECTORY') + datetime.now().strftime('%Y') + '.json', 'w') as holiday_file:
                 json.dump(holidays_data, holiday_file)
 
     # 공휴일 데이터 가공
