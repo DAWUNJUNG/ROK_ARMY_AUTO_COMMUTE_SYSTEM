@@ -19,7 +19,7 @@ def check_device_os():
     system_os = platform.system()
 
     if system_os == "Windows":
-        return "./chromedriver-windows.exe"
+        return "chromedriver-windows.exe"
     elif system_os == "Darwin":
         if platform.mac_ver()[2] == "arm64":
             return "./chromedriver-mac_arm"
