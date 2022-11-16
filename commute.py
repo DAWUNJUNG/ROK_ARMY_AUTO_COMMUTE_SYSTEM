@@ -32,20 +32,6 @@ def get_annual_info():
     global log_message
     log_message = log_message + "KTbizmeka 휴가 정보 불러오기 시작 \n"
 
-    options = {
-        'https': 'proxy detail',
-        'disable_encoding': True
-    }
-
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('headless')
-    chrome_options.add_argument('window-size=1920x1080')
-    chrome_options.add_argument("disable-gpu")
-    chrome_options.add_argument('lang=ko_KR')
-
-    browser = wired_webdriver.Chrome(executable_path=check_device_os(), seleniumwire_options=options,
-                                     chrome_options=chrome_options)
-
     # 비즈메카 열기
     browser.get('https://ezsso.bizmeka.com/loginForm.do')
     browser.implicitly_wait(100)
@@ -63,6 +49,17 @@ def get_annual_info():
 
     # 비즈메카 휴가신청 이동
     browser.get('https://ezkhuman.bizmeka.com/product/outlnk.do?code=PA02')
+    browser.implicitly_wait(100)
+
+    if browser.current_url == "https://ezsso.bizmeka.com/rule/updatePasswordView.do":
+        browser.find_element(By.ID, 'passwordOld').send_keys(os.environ.get('KT_BIZMEKA_PW'))
+        browser.find_element(By.ID, 'password').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
+        browser.find_element(By.ID, 'passwordAgain').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
+        browser.find_element(By.ID, 'submitBtn').click()
+        old_pw = os.environ.get('KT_BIZMEKA_PW')
+        dotenv.set_key(find_dotenv(), "KT_BIZMEKA_PW", os.environ.get('KT_BIZMEKA_PW_CHANGE'))
+        dotenv.set_key(find_dotenv(), "KT_BIZMEKA_PW_CHANGE", old_pw)
+
     browser.implicitly_wait(100)
 
     request = browser.wait_for_request('.*/getApplVctnList.*', timeout=100)
@@ -99,8 +96,9 @@ def get_annual_info():
                     "type": "afternoon"
                 }
     browser.implicitly_wait(100)
-    browser.quit()
     log_message = log_message + "KTbizmeka 휴가 정보 불러오기 종료 \n"
+
+
 
 
 def work_time_check():
@@ -188,45 +186,6 @@ def auto_commute():
     global log_message
     result_status = "fail"
 
-    # 브라우저 설정
-    options = {
-        'https': 'proxy detail',
-        'disable_encoding': True
-    }
-
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('headless')
-    chrome_options.add_argument('window-size=1920x1080')
-    chrome_options.add_argument("disable-gpu")
-    chrome_options.add_argument('lang=ko_KR')
-
-    browser = wired_webdriver.Chrome(executable_path=check_device_os(), seleniumwire_options=options,
-                                     chrome_options=chrome_options)
-
-    # 비즈메카 열기
-    browser.get('https://ezsso.bizmeka.com/loginForm.do')
-    browser.implicitly_wait(100)
-
-    # 인증 쿠키 유지설정
-    browser.add_cookie({
-        'name': os.environ.get('KT_BIZMEKA_COOKIE_NAME'),
-        'value': os.environ.get('KT_BIZMEKA_COOKIE_VALUE')
-    })
-
-    # 비즈메카 로그인
-    browser.find_element(By.ID, 'username').send_keys(os.environ.get('KT_BIZMEKA_ID'))
-    browser.find_element(By.ID, 'password').send_keys(os.environ.get('KT_BIZMEKA_PW'))
-    browser.find_element(By.ID, 'btnSubmit').click()
-
-    if browser.current_url == "https://ezsso.bizmeka.com/rule/updatePasswordView.do":
-        browser.find_element(By.ID, 'passwordOld').send_keys(os.environ.get('KT_BIZMEKA_PW'))
-        browser.find_element(By.ID, 'password').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
-        browser.find_element(By.ID, 'passwordAgain').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
-        browser.find_element(By.ID, 'submitBtn').click()
-        old_pw = os.environ.get('KT_BIZMEKA_PW')
-        dotenv.set_key(find_dotenv(), "KT_BIZMEKA_PW", os.environ.get('KT_BIZMEKA_PW_CHANGE'))
-        dotenv.set_key(find_dotenv(), "KT_BIZMEKA_PW_CHANGE", old_pw)
-
     # 비즈메카 근태관리 이동
     browser.get('https://ezkhuman.bizmeka.com/product/outlnk.do?code=PJ02')
     request = browser.wait_for_request('.*/getOnedayGolvwkMngPersList.*', timeout=100)
@@ -287,6 +246,20 @@ if __name__ == "__main__":
 
     ##환경변수 파일 호출
     load_dotenv()
+
+    options = {
+        'https': 'proxy detail',
+        'disable_encoding': True
+    }
+
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('headless')
+    chrome_options.add_argument('window-size=1920x1080')
+    chrome_options.add_argument("disable-gpu")
+    chrome_options.add_argument('lang=ko_KR')
+
+    browser = wired_webdriver.Chrome(executable_path=check_device_os(), seleniumwire_options=options,
+                                     chrome_options=chrome_options)
 
     # 로그파일 오픈
     logfile = open(str(os.environ.get('LOG_DIRECTORY')) + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a', encoding="UTF-8")
