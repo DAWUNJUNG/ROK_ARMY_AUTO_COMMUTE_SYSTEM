@@ -4,8 +4,6 @@ import os
 import platform
 from selenium import webdriver
 from seleniumwire import webdriver as wired_webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
 from datetime import datetime, timedelta
@@ -244,20 +242,23 @@ if __name__ == "__main__":
     global log_message
     log_message = ""
 
-    ##환경변수 파일 호출
+    # 환경변수 파일 호출
     load_dotenv()
 
+    # 브라우저 네트워크 통신 설정
     options = {
         'https': 'proxy detail',
         'disable_encoding': True
     }
 
+    # 크로미움 설정
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('headless')
     chrome_options.add_argument('window-size=1920x1080')
     chrome_options.add_argument("disable-gpu")
     chrome_options.add_argument('lang=ko_KR')
 
+    # 설정 정보 할당
     browser = wired_webdriver.Chrome(executable_path=check_device_os(), seleniumwire_options=options,
                                      chrome_options=chrome_options)
 
