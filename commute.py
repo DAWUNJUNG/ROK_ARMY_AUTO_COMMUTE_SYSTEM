@@ -13,6 +13,7 @@ import requests
 import json
 import smtplib
 from email.mime.text import MIMEText
+import time
 
 
 def check_device_os():
@@ -188,13 +189,19 @@ def auto_commute():
     result_status = "fail"
 
     # 브라우저 설정
+    options = {
+        'https': 'proxy detail',
+        'disable_encoding': True
+    }
+
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('headless')
+    # chrome_options.add_argument('headless')
     chrome_options.add_argument('window-size=1920x1080')
     chrome_options.add_argument("disable-gpu")
     chrome_options.add_argument('lang=ko_KR')
 
-    browser = webdriver.Chrome(executable_path=check_device_os(), chrome_options=chrome_options)
+    browser = wired_webdriver.Chrome(executable_path=check_device_os(), seleniumwire_options=options,
+                                     chrome_options=chrome_options)
 
     # 비즈메카 열기
     browser.get('https://ezsso.bizmeka.com/loginForm.do')
@@ -222,7 +229,10 @@ def auto_commute():
 
     # 비즈메카 근태관리 이동
     browser.get('https://ezkhuman.bizmeka.com/product/outlnk.do?code=PJ02')
-    WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.ID, 'onedayGolvwkMngPersView')))
+    request = browser.wait_for_request('.*/getOnedayGolvwkMngPersList.*', timeout=100)
+    request_data = json.loads(request.response.body.decode('utf-8'))
+    if not request_data:
+        log_message = log_message + "***근태 관리 접근 실패***\n"
 
     # 출퇴근 처리
     log_message = log_message + "근태 기록 시작\n"
@@ -238,7 +248,7 @@ def auto_commute():
         if '하시겠습니까?' in alert_text:
             result_status = "출근 처리 완료"
         alert.accept()
-        WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.ID, 'onedayGolvwkMngPersView')))
+        browser.implicitly_wait(100)
     elif commute_type == 'home':
         log_message = log_message + "퇴근\n"
         browser.find_element(By.ID, 'btnGoHome').click()
@@ -248,7 +258,7 @@ def auto_commute():
         if '하시겠습니까?' in alert_text:
             result_status = "퇴근 처리 완료"
         alert.accept()
-        WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.ID, 'onedayGolvwkMngPersView')))
+        browser.implicitly_wait(100)
 
     log_message = log_message + "근태 기록 결과 : " + result_status + "\n"
     log_message = log_message + "근태 기록 종료\n"
