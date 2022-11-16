@@ -11,7 +11,6 @@ import requests
 import json
 import smtplib
 from email.mime.text import MIMEText
-import time
 
 
 def check_device_os():
