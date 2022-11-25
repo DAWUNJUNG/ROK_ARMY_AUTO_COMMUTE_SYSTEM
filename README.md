@@ -48,10 +48,10 @@
 
 #### Windows crontab
 ```text
-    50 9 * * 1-5  DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
-    50 14 * * 1-5  DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
-    1 15 * * 1-5  DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
-    1 19 * * 1-5  DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
+    50 9 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
+    50 14 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
+    1 15 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
+    1 19 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
 ```
 
 ## Requeired env setting value
