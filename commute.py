@@ -95,9 +95,6 @@ def get_annual_info():
     browser.implicitly_wait(100)
     log_message = log_message + "KTbizmeka 휴가 정보 불러오기 종료 \n"
 
-
-
-
 def work_time_check():
     global log_message
     log_message = log_message + "근무 시간 검증 시작\n"
@@ -143,27 +140,25 @@ def work_time_check():
         go_work_time = datetime.now().strptime('10:00:00', '%H:%M:%S').strftime('%H:%M:%S')
         go_home_time = datetime.now().strptime('19:00:00', '%H:%M:%S').strftime('%H:%M:%S')
 
-        if (now_time < go_work_time):
+        if now_time < go_work_time:
             return 'office'
-        elif (now_time > go_home_time):
+        elif now_time > go_home_time:
             return 'home'
     else:
-        holiday_type = "연차"
-
         if holiday_list[now_date]['type'] == 'morning':
-            holiday_type = "오전 반차"
+            log_message = log_message + "근무 타입 : 오전 반차\n"
 
             # 출퇴근시간 타입 구분
             go_work_time_first = datetime.now().strptime('14:40:00', '%H:%M:%S').strftime('%H:%M:%S')
             go_work_time_second = datetime.now().strptime('15:00:00', '%H:%M:%S').strftime('%H:%M:%S')
             go_home_time = datetime.now().strptime('19:00:00', '%H:%M:%S').strftime('%H:%M:%S')
 
-            if now_time > go_work_time_first and now_time < go_work_time_second:
+            if go_work_time_first < now_time < go_work_time_second:
                 return 'office'
             elif now_time > go_home_time:
                 return 'home'
         elif holiday_list[now_date]['type'] == 'afternoon':
-            holiday_type = "오후 반차"
+            log_message = log_message + "근무 타입 : 오후 반차\n"
 
             # 출퇴근시간 타입 구분
             go_work_time = datetime.now().strptime('10:00:00', '%H:%M:%S').strftime('%H:%M:%S')
@@ -174,7 +169,7 @@ def work_time_check():
             elif now_time > go_home_time:
                 return 'home'
 
-        log_message = log_message + "근무 타입 : " + holiday_type + "\n"
+        log_message = log_message + "근무 타입 : 연차\n"
 
     return 'no_commute'
 
@@ -279,4 +274,4 @@ if __name__ == "__main__":
     logfile.close()
 
     # 결과 메일 발송 프로세스
-    # log_mail_send(log_message)
+    log_mail_send(log_message)
