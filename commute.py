@@ -168,8 +168,8 @@ def work_time_check():
                 return 'office'
             elif now_time > go_home_time:
                 return 'home'
-
-        log_message = log_message + "근무 타입 : 연차\n"
+        else:
+            log_message = log_message + "근무 타입 : 연차\n"
 
     return 'no_commute'
 
