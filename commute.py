@@ -222,10 +222,13 @@ def auto_commute():
 
 def log_mail_send(result_message):
     smtp = smtplib.SMTP('smtp.gmail.com', 587)
+    smtp.ehlo()
     smtp.starttls()  # TLS 사용시 필요
     smtp.login(os.environ.get('GOOGLE_ID'), os.environ.get('GOOGLE_APP_PW'))
 
     msg = MIMEText(result_message)
+    msg['To'] = os.environ.get('DESTINATION_EMAIL')
+    msg['From'] = os.environ.get('SOURCE_EMAIL')
     msg['Subject'] = '근태 자동화 도구 동작 결과 안내 (' + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ')'
     smtp.sendmail(os.environ.get('SOURCE_EMAIL'), os.environ.get('DESTINATION_EMAIL'), msg.as_string())
 
