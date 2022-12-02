@@ -163,10 +163,11 @@ def work_time_check():
             # 출퇴근시간 타입 구분
             go_work_time = datetime.now().strptime('10:00:00', '%H:%M:%S').strftime('%H:%M:%S')
             go_home_time = datetime.now().strptime('15:00:00', '%H:%M:%S').strftime('%H:%M:%S')
+            go_home_time_second = datetime.now().strptime('16:00:00', '%H:%M:%S').strftime('%H:%M:%S')
 
             if now_time < go_work_time:
                 return 'office'
-            elif now_time > go_home_time:
+            elif go_home_time_second > now_time > go_home_time:
                 return 'home'
         else:
             log_message = log_message + "근무 타입 : 연차\n"
