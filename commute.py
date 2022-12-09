@@ -94,7 +94,6 @@ def get_annual_info():
                 }
     browser.implicitly_wait(100)
     log_message = log_message + "KTbizmeka 휴가 정보 불러오기 종료 \n"
-    browser.quit()
 
 def work_time_check():
     global log_message
@@ -222,7 +221,6 @@ def auto_commute():
     browser.quit()
 
 
-
 def log_mail_send(result_message):
     smtp = smtplib.SMTP('smtp.gmail.com', 587)
     smtp.ehlo()
@@ -234,6 +232,7 @@ def log_mail_send(result_message):
     msg['From'] = os.environ.get('SOURCE_EMAIL')
     msg['Subject'] = '근태 자동화 도구 동작 결과 안내 (' + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ')'
     smtp.sendmail(os.environ.get('SOURCE_EMAIL'), os.environ.get('DESTINATION_EMAIL'), msg.as_string())
+
     smtp.quit()
 
 
