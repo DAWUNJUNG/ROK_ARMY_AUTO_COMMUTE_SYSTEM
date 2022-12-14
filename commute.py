@@ -273,6 +273,8 @@ if __name__ == "__main__":
     # 출퇴근 기록 프로세스
     auto_commute()
 
+    browser.quit()
+
     # 결과 로그 파일 생성
     logfile.write(log_message)
     logfile.close()
