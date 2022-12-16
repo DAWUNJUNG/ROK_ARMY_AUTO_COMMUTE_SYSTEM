@@ -68,15 +68,14 @@ def get_annual_info():
             start_date = datetime.strptime(str(data['vctnFrDt']), '%Y.%m.%d').strftime('%Y-%m-%d')
             end_date = datetime.strptime(str(data['vctnToDt']), '%Y.%m.%d').strftime('%Y-%m-%d')
 
-            diff_start_date = datetime.strptime(str(data['vctnFrDt']), '%Y.%m.%d').strftime('%Y%m%d')
-            diff_end_date = datetime.strptime(str(data['vctnToDt']), '%Y.%m.%d').strftime('%Y%m%d')
-            diff_date = datetime.strptime(diff_end_date, "%Y%m%d") - datetime.strptime(diff_start_date, "%Y%m%d")
-            diff_day = diff_date.days
-
             if "전일" in data['oneHalfGbn']:
                 if start_date != end_date:
-                    for i in range(diff_day):
-                        key_date = datetime.strptime(diff_start_date, "%Y%m%d") + timedelta(days=(i + 1))
+                    diff_start_date = datetime.strptime(str(data['vctnFrDt']), '%Y.%m.%d').strftime('%Y%m%d')
+                    diff_end_date = datetime.strptime(str(data['vctnToDt']), '%Y.%m.%d').strftime('%Y%m%d')
+                    diff_date = datetime.strptime(diff_end_date, "%Y%m%d") - datetime.strptime(diff_start_date, "%Y%m%d")
+
+                    for i in range(diff_date.days + 1):
+                        key_date = datetime.strptime(diff_start_date, "%Y%m%d") + timedelta(days=(+ i))
                         holiday_list[datetime.strptime(str(key_date), '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d')] = {
                             "type": "full_day"
                         }
