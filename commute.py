@@ -11,18 +11,7 @@ import requests
 import json
 import smtplib
 from email.mime.text import MIMEText
-
-
-def check_device_os():
-    system_os = platform.system()
-
-    if system_os == "Windows":
-        return "chromedriver-windows.exe"
-    elif system_os == "Darwin":
-        if platform.mac_ver()[2] == "arm64":
-            return "./chromedriver-mac_arm"
-        else:
-            return "./chromedriver-mac_x86"
+import chromedriver_autoinstaller
 
 
 def get_annual_info():
@@ -217,7 +206,6 @@ def auto_commute():
     log_message = log_message + "근태 기록 자동화 종료\n\n\n\n\n"
 
     browser.implicitly_wait(100)
-    browser.quit()
 
 
 def log_mail_send(result_message):
@@ -248,6 +236,9 @@ if __name__ == "__main__":
         'disable_encoding': True
     }
 
+    # 크롬 설치
+    chromedriver_autoinstaller.install()
+
     # 크로미움 설정
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('headless')
@@ -256,7 +247,7 @@ if __name__ == "__main__":
     chrome_options.add_argument('lang=ko_KR')
 
     # 설정 정보 할당
-    browser = wired_webdriver.Chrome(executable_path=check_device_os(), seleniumwire_options=options,
+    browser = wired_webdriver.Chrome(seleniumwire_options=options,
                                      chrome_options=chrome_options)
 
     # 로그파일 오픈
