@@ -40,13 +40,7 @@
 
 ### Cron Scheduler
 
-#### setup
-```text
-    1. cron이 설치된 경로에 프로젝트내에 ca.crt파일과 chromedriver.exe 파일을 복사해 두어야 합니다.
-    2. crontab에 스케줄러를 입력 후 startcron.bat을 실행시켜 cron을 상시대기 상태로 변경합니다.
-```
-
-#### Windows crontab
+#### crontab
 ```text
     50 9 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
     50 14 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
