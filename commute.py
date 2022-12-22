@@ -1,7 +1,6 @@
 import dotenv
 from dotenv import find_dotenv, load_dotenv
 import os
-import platform
 from selenium import webdriver
 from seleniumwire import webdriver as wired_webdriver
 from selenium.webdriver.common.by import By
