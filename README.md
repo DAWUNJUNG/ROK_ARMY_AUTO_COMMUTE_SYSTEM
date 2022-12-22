@@ -26,29 +26,14 @@
 
 
 ## Project Setup
-### KT BIZMEKA Phone Auth COOKIE SET
+### Default DIRECTORY SET
 ```text
-    selenium-wire 사용을 위해 Bypass SSL 인증서를 모든 인증 방식에 등록해줘야합니다. 
-    방법 URL : https://support.google.com/chrome/a/answer/3505249?hl=ko
+    프로젝트 clone이후 반드시 다음 두가지 Directory를 추가해야합니다.
+    - log
+    - holidays
 ```
 
-### chrome SSL Set
-```text
-    selenium-wire 사용을 위해 Bypass SSL 인증서를 모든 인증 방식에 등록해줘야합니다. 
-    방법 URL : https://support.google.com/chrome/a/answer/3505249?hl=ko
-```
-
-### Cron Scheduler
-
-#### crontab
-```text
-    50 9 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
-    50 14 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
-    1 15 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
-    1 19 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
-```
-
-## Requeired env setting value
+### Requeired env setting value
 ```text
     KT_BIZMEKA_COOKIE_NAME=휴대전화 인증 후 발급된 쿠키 이름
     KT_BIZMEKA_COOKIE_VALUE=휴대전화 인증 후 발급된 쿠키 값
@@ -63,6 +48,27 @@
     GOOGLE_APP_PW=구글 앱 비밀번호
     SOURCE_EMAIL=발신 EMAIL 주소
     DESTINATION_EMAIL=수신 EMAIL 주소
+```
+
+### KT BIZMEKA Phone Auth COOKIE SET
+```text
+    selenium-wire 사용을 위해 Bypass SSL 인증서를 모든 인증 방식에 등록해줘야합니다. 
+    방법 URL : https://support.google.com/chrome/a/answer/3505249?hl=ko
+```
+
+### chrome SSL Set
+```text
+    selenium-wire 사용을 위해 Bypass SSL 인증서를 모든 인증 방식에 등록해줘야합니다. 
+    방법 URL : https://support.google.com/chrome/a/answer/3505249?hl=ko
+```
+
+### Cron Scheduler
+#### crontab
+```text
+    50 9 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
+    50 14 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
+    1 15 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
+    1 19 * * 1-5 python_DIR DIR\ROK_ARMY_AUTO_COMMUTE_SYSTEM\commute.py
 ```
 
 ## DATA PORTAL KEY Generate
