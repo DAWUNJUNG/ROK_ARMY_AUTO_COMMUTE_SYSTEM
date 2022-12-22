@@ -33,7 +33,7 @@
     - holidays
 ```
 
-### Requeired env setting value
+### Required env setting value
 ```text
     KT_BIZMEKA_COOKIE_NAME=휴대전화 인증 후 발급된 쿠키 이름
     KT_BIZMEKA_COOKIE_VALUE=휴대전화 인증 후 발급된 쿠키 값
@@ -49,6 +49,17 @@
     SOURCE_EMAIL=발신 EMAIL 주소
     DESTINATION_EMAIL=수신 EMAIL 주소
 ```
+
+### Required Python Librarys
+```text
+    - requests
+    - python-dotenv
+    - selenium
+    - selenium-wire
+    - datetime
+    - chromedriver_autoinstaller
+```
+
 
 ### KT BIZMEKA Phone Auth COOKIE SET
 ```text
