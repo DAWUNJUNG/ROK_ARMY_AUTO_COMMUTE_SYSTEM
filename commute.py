@@ -32,11 +32,8 @@ def get_annual_info():
     browser.find_element(By.ID, 'password').send_keys(os.environ.get('KT_BIZMEKA_PW'))
     browser.find_element(By.ID, 'btnSubmit').click()
 
-    # 비즈메카 휴가신청 이동
-    browser.get('https://ezkhuman.bizmeka.com/product/outlnk.do?code=PA02')
-    browser.implicitly_wait(100)
-
     if browser.current_url == "https://ezsso.bizmeka.com/rule/updatePasswordView.do":
+        log_message = log_message + "정기 비밀번호 변경 시작 \n"
         browser.find_element(By.ID, 'passwordOld').send_keys(os.environ.get('KT_BIZMEKA_PW'))
         browser.find_element(By.ID, 'password').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
         browser.find_element(By.ID, 'passwordAgain').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
@@ -44,7 +41,14 @@ def get_annual_info():
         old_pw = os.environ.get('KT_BIZMEKA_PW')
         dotenv.set_key(find_dotenv(), "KT_BIZMEKA_PW", os.environ.get('KT_BIZMEKA_PW_CHANGE'))
         dotenv.set_key(find_dotenv(), "KT_BIZMEKA_PW_CHANGE", old_pw)
+        log_message = log_message + "이전 비밀번호와 변경 대상 비밀번호 env 수정 완료 \n"
+        alert = Alert(browser)
+        alert.accept()
+        log_message = log_message + "정기 비밀번호 변경 완료 \n"
+        browser.implicitly_wait(100)
 
+    # 비즈메카 휴가신청 이동
+    browser.get('https://ezkhuman.bizmeka.com/product/outlnk.do?code=PA02')
     browser.implicitly_wait(100)
 
     request = browser.wait_for_request('.*/getApplVctnList.*', timeout=100)
