@@ -248,6 +248,8 @@ if __name__ == "__main__":
     chrome_options.add_argument('window-size=1920x1080')
     chrome_options.add_argument("disable-gpu")
     chrome_options.add_argument('lang=ko_KR')
+    chrome_options.add_argument('ignore-certificate-errors')  # SSL 관련 오류 무시
+    chrome_options.add_argument('ignore-ssl-errors')  # SSL 관련 오류 무시
 
     # 설정 정보 할당
     browser = wired_webdriver.Chrome(seleniumwire_options=options,
