@@ -17,7 +17,7 @@
                         seleniumwire
                         datetime
                         requests
-                        json
+                        chromedriver-autoinstaller
                         
             - Cron    : 
                         nncron (Windows)
