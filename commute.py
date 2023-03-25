@@ -303,6 +303,7 @@ if __name__ == "__main__":
     auto_commute.auto_commute()
 
     # 메일 발송
-    # auto_commute.mail_send()
+    if os.environ.get('LOG_EMAIL_SEND') == 'Y':
+        auto_commute.mail_send()
 
     del auto_commute
