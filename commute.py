@@ -78,13 +78,14 @@ class AutoCommute:
             self.browser.find_element(By.ID, 'password').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
             self.browser.find_element(By.ID, 'passwordAgain').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
             self.browser.find_element(By.ID, 'submitBtn').click()
+            alert = Alert(self.browser)
+            if alert.text != '':
+                alert.accept()
+            self.log("정기 비밀번호 변경 완료 \n")
             old_pw = os.environ.get('KT_BIZMEKA_PW')
             dotenv.set_key(find_dotenv(), "KT_BIZMEKA_PW", os.environ.get('KT_BIZMEKA_PW_CHANGE'))
             dotenv.set_key(find_dotenv(), "KT_BIZMEKA_PW_CHANGE", old_pw)
             self.log("이전 비밀번호와 변경 대상 비밀번호 env 수정 완료 \n")
-            alert = Alert(self.browser)
-            alert.accept()
-            self.log("정기 비밀번호 변경 완료 \n")
             self.browser.implicitly_wait(100)
 
     def get_annual_info(self):
