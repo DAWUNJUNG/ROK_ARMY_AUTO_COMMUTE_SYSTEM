@@ -33,8 +33,8 @@ class AutoCommute:
 
         # 크로미움 설정
         self.chrome_options = webdriver.ChromeOptions()
-        self.chrome_options.add_argument('headless')
-        self.chrome_options.add_argument('--no-sandbox')
+        # self.chrome_options.add_argument('headless')
+        # self.chrome_options.add_argument('--no-sandbox')
         self.chrome_options.add_argument('window-size=1920x1080')
         self.chrome_options.add_argument("disable-gpu")
         self.chrome_options.add_argument('lang=ko_KR')
@@ -57,7 +57,7 @@ class AutoCommute:
     def bizmeka_login(self):
         self.log("KTbizmeka 휴가 정보 불러오기 시작 \n")
         # 비즈메카 열기
-        self.browser.get('https://ezsso.bizmeka.com/loginForm.do')
+        self.browser.get('https://ezsso.bizmeka.com/rule/updatePasswordView.do')
         self.browser.implicitly_wait(100)
 
         # 인증 쿠키 유지설정
@@ -70,6 +70,7 @@ class AutoCommute:
         self.browser.find_element(By.ID, 'username').send_keys(os.environ.get('KT_BIZMEKA_ID'))
         self.browser.find_element(By.ID, 'password').send_keys(os.environ.get('KT_BIZMEKA_PW'))
         self.browser.find_element(By.ID, 'btnSubmit').click()
+        self.browser.implicitly_wait(100)
 
         # 비밀번호 변경 페이지 이동시 비밀번호 변경
         if self.browser.current_url == "https://ezsso.bizmeka.com/rule/updatePasswordView.do":
@@ -79,8 +80,7 @@ class AutoCommute:
             self.browser.find_element(By.ID, 'passwordAgain').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
             self.browser.find_element(By.ID, 'submitBtn').click()
             alert = Alert(self.browser)
-            if alert.text != '':
-                alert.accept()
+            alert.accept()
             self.log("정기 비밀번호 변경 완료 \n")
             old_pw = os.environ.get('KT_BIZMEKA_PW')
             dotenv.set_key(find_dotenv(), "KT_BIZMEKA_PW", os.environ.get('KT_BIZMEKA_PW_CHANGE'))
@@ -291,20 +291,22 @@ class AutoCommute:
 if __name__ == "__main__":
     auto_commute = AutoCommute()
 
-    # 공공 데이터 포털 휴무일 정보 호출
-    auto_commute.common_data_portal()
-
-    # 비즈메카 로그인
     auto_commute.bizmeka_login()
 
+    # 공공 데이터 포털 휴무일 정보 호출
+    # auto_commute.common_data_portal()
+
+    # 비즈메카 로그인
+    # auto_commute.bizmeka_login()
+
     # 휴무일 데이터 호출
-    auto_commute.get_annual_info()
+    # auto_commute.get_annual_info()
 
     # 출퇴근 기록
-    auto_commute.auto_commute()
+    # auto_commute.auto_commute()
 
     # 메일 발송
-    if os.environ.get('LOG_EMAIL_SEND') == 'Y':
-        auto_commute.mail_send()
+    # if os.environ.get('LOG_EMAIL_SEND') == 'Y':
+    #     auto_commute.mail_send()
 
     del auto_commute
