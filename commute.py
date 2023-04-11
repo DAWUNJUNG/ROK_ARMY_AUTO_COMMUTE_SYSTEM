@@ -135,6 +135,8 @@ class AutoCommute:
 
     def common_data_portal(self):
         # 공휴일 파일 확인
+        if not os.path.exists(os.environ.get('HOLIDAY_DIRECTORY')):
+            os.makedirs(os.environ.get('HOLIDAY_DIRECTORY'))
         if os.path.isfile(os.environ.get('HOLIDAY_DIRECTORY') + datetime.now().strftime('%Y') + '.json'):
             # 공휴일 파일 불러오기
             with open(os.environ.get('HOLIDAY_DIRECTORY') + datetime.now().strftime('%Y') + '.json',
