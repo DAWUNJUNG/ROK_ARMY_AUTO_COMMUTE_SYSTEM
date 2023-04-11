@@ -42,8 +42,10 @@ class AutoCommute:
         self.chrome_options.add_argument('ignore-ssl-errors')  # SSL 관련 오류 무시
 
         # 로그 파일 선언
-        log_dir = str(os.environ.get('LOG_DIRECTORY')) + datetime.now().strftime('%Y') + '/' + datetime.now().strftime('%m') + '/'
-        self.logfile = open(log_dir + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a',
+        log_dir = str(os.environ.get('LOG_DIRECTORY')) + datetime.now().strftime('%Y') + '/' + datetime.now().strftime('%m')
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        self.logfile = open(log_dir + '/' + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a',
                             encoding="UTF-8")
 
         # 크롬 설치
