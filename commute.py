@@ -42,7 +42,7 @@ class AutoCommute:
         self.chrome_options.add_argument('ignore-ssl-errors')  # SSL 관련 오류 무시
 
         # 로그 파일 선언
-        log_dir = str(os.environ.get('LOG_DIRECTORY')) + '/' + datetime.now().strftime('%Y') + '/' + datetime.now().strftime('%m') + '/'
+        log_dir = str(os.environ.get('LOG_DIRECTORY')) + datetime.now().strftime('%Y') + '/' + datetime.now().strftime('%m') + '/'
         self.logfile = open(log_dir + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a',
                             encoding="UTF-8")
 
