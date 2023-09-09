@@ -50,10 +50,10 @@ class AutoCommute:
                             encoding="UTF-8")
 
         # 크롬 설치
-        chromedriver_autoinstaller.install()
+        path = chromedriver_autoinstaller.install()
 
         # 설정 정보 할당
-        self.browser = wired_webdriver.Chrome(seleniumwire_options=self.options, chrome_options=self.chrome_options)
+        self.browser = wired_webdriver.Chrome(path, seleniumwire_options=self.options, chrome_options=self.chrome_options)
         self.log("근태 기록 자동화 시작\n" +
                  f"프로세스 시작 시간 : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n" +
                  "Made By Dawun (github : https://github.com/DAWUNJUNG)\n")
