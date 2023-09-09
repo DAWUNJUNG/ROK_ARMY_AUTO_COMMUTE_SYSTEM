@@ -53,9 +53,7 @@ class AutoCommute:
                             encoding="UTF-8")
 
         # 크롬 설치
-        test = chromedriver_autoinstaller.install()
-
-        print(test)
+        chromedriver_autoinstaller.install()
 
         # 설정 정보 할당
         self.browser = wired_webdriver.Chrome(seleniumwire_options=self.options, chrome_options=self.chrome_options)
