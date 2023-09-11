@@ -5,7 +5,7 @@ from selenium import webdriver
 from seleniumwire import webdriver as wired_webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
-from selenium.webdriver.common.service import Service
+from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from datetime import datetime, timedelta
 import requests
