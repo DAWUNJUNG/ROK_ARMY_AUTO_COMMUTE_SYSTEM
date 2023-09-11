@@ -5,6 +5,7 @@ from selenium import webdriver
 from seleniumwire import webdriver as wired_webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.common.service import Service
 from datetime import datetime, timedelta
 import requests
 import json
@@ -55,10 +56,10 @@ class AutoCommute:
                             encoding="UTF-8")
 
         # 크롬 설치
-        chromedriver_autoinstaller.install()
+        chromeService = Service(executable_path=chromedriver_autoinstaller.install())
 
         # 설정 정보 할당
-        self.browser = wired_webdriver.Chrome(seleniumwire_options=self.options, chrome_options=self.chrome_options)
+        self.browser = wired_webdriver.Chrome(service=chromeService, seleniumwire_options=self.options, chrome_options=self.chrome_options)
         self.log("근태 기록 자동화 시작\n" +
                  f"프로세스 시작 시간 : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n" +
                  "Made By Dawun (github : https://github.com/DAWUNJUNG)\n")
