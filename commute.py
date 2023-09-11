@@ -6,12 +6,12 @@ from seleniumwire import webdriver as wired_webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from datetime import datetime, timedelta
 import requests
 import json
 import smtplib
 from email.mime.text import MIMEText
-import chromedriver_autoinstaller
 import traceback
 
 
@@ -56,7 +56,7 @@ class AutoCommute:
                             encoding="UTF-8")
 
         # 크롬 설치
-        chromeService = Service(executable_path=chromedriver_autoinstaller.install())
+        chromeService = Service(executable_path=ChromeDriverManager().install())
 
         # 설정 정보 할당
         self.browser = wired_webdriver.Chrome(service=chromeService, seleniumwire_options=self.options, chrome_options=self.chrome_options)
