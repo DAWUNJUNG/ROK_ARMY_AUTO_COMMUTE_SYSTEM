@@ -4,6 +4,7 @@ import os
 from selenium import webdriver
 from seleniumwire import webdriver as wired_webdriver
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
 from datetime import datetime, timedelta
@@ -11,6 +12,7 @@ import requests
 import json
 import smtplib
 from email.mime.text import MIMEText
+import chromedriver_autoinstaller
 import traceback
 
 
@@ -54,10 +56,8 @@ class AutoCommute:
         self.logfile = open(log_dir + '/' + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a',
                             encoding="UTF-8")
 
-        print(os.environ.get('CHROME_DRIVER_PATH'))
-
         # 설정 정보 할당
-        self.browser = wired_webdriver.Chrome(service=Service(os.environ.get('CHROME_DRIVER_PATH')), seleniumwire_options=self.options, chrome_options=self.chrome_options)
+        self.browser = wired_webdriver.Chrome(service=Service(ChromeDriverManager().install()), seleniumwire_options=self.options, chrome_options=self.chrome_options)
         self.log("근태 기록 자동화 시작\n" +
                  f"프로세스 시작 시간 : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n" +
                  "Made By Dawun (github : https://github.com/DAWUNJUNG)\n")
