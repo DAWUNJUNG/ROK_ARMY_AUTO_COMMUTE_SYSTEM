@@ -67,9 +67,11 @@ class AutoCommute:
 
             # 인증 쿠키 유지설정
             self.browser.add_cookie({
-                'name': os.environ.get('KT_BIZMEKA_COOKIE_NAME'),
-                'value': os.environ.get('KT_BIZMEKA_COOKIE_VALUE')
+                'name': str(os.environ.get('KT_BIZMEKA_COOKIE_NAME')),
+                'value': str(os.environ.get('KT_BIZMEKA_COOKIE_VALUE'))
             })
+
+            print(self.browser.get_cookies())
 
             # 비즈메카 로그인
             self.browser.find_element(By.ID, 'username').send_keys(os.environ.get('KT_BIZMEKA_ID'))
