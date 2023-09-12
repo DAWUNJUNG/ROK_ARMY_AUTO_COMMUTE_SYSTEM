@@ -3,7 +3,6 @@ from dotenv import find_dotenv, load_dotenv
 import os
 from selenium import webdriver
 from seleniumwire import webdriver as wired_webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
 from datetime import datetime, timedelta
@@ -55,10 +54,11 @@ class AutoCommute:
         self.logfile = open(log_dir + '/' + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a',
                             encoding="UTF-8")
 
-        service = Service(os.environ.get('CHROME_DRIVER_PATH'))
+        # 크롬 설치
+        chromedriver_autoinstaller.install()
 
         # 설정 정보 할당
-        self.browser = wired_webdriver.Chrome(service=service, seleniumwire_options=self.options, chrome_options=self.chrome_options)
+        self.browser = wired_webdriver.Chrome(seleniumwire_options=self.options, chrome_options=self.chrome_options)
         self.log("근태 기록 자동화 시작\n" +
                  f"프로세스 시작 시간 : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n" +
                  "Made By Dawun (github : https://github.com/DAWUNJUNG)\n")
