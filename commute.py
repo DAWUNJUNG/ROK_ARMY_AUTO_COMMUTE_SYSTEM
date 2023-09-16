@@ -34,7 +34,6 @@ class AutoCommute:
 
         # 크로미움 설정
         self.chrome_options = webdriver.ChromeOptions()
-        self.chrome_options.add_argument("incognito")
         self.chrome_options.add_argument('headless')
         self.chrome_options.add_argument('--no-sandbox')
         self.chrome_options.add_argument('window-size=1920x1080')
