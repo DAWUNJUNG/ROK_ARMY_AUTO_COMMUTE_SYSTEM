@@ -55,7 +55,7 @@ class AutoCommute:
         chromedriver_autoinstaller.install()
 
         # 설정 정보 할당
-        self.browser = webdriver.Chrome(seleniumwire_options=self.options, options=self.chrome_options)
+        self.browser = webdriver.Chrome(executable_path='chromedriver', seleniumwire_options=self.options, options=self.chrome_options)
         self.log("근태 기록 자동화 시작\n" +
                  f"프로세스 시작 시간 : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n" +
                  "Made By Dawun (github : https://github.com/DAWUNJUNG)\n")
