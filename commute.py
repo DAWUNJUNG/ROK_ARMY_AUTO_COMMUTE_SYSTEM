@@ -33,15 +33,11 @@ class AutoCommute:
         # 크로미움 설정
         self.chrome_options = webdriver.ChromeOptions()
         self.chrome_options.add_argument('--no-sandbox')
+        self.chrome_options.add_argument('--headless')
+        self.chrome_options.add_argument('--ignore-certificate-errors')
         self.chrome_options.add_argument('--disable-dev-shm-usage')
-        self.chrome_options.add_argument("--remote-debugging-port=9222")
-        self.chrome_options.add_argument('--start-maximized')
+        self.chrome_options.add_argument('--disable-extensions')
         self.chrome_options.add_argument('--disable-gpu')
-        self.chrome_options.add_argument('--disable-popup-blocking')
-        self.chrome_options.add_argument("--incognito")
-        self.chrome_options.add_argument('ignore-certificate-errors')  # SSL 관련 오류 무시
-        self.chrome_options.add_argument('ignore-ssl-errors')  # SSL 관련 오류 무시
-        self.chrome_options.add_experimental_option("detach", True)
 
         # 로그 파일 선언
         log_dir = str(os.environ.get('LOG_DIRECTORY')) + datetime.now().strftime('%Y') + '/' + datetime.now().strftime('%m')
