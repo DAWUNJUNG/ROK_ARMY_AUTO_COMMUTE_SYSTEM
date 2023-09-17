@@ -53,8 +53,7 @@ class AutoCommute:
                             encoding="UTF-8")
 
         # 크롬 설치
-        chromedriver_autoinstaller.install()
-        service = Service(executable_path='chromedriver')
+        service = Service(executable_path='./chromedriver')
 
         # 설정 정보 할당
         self.browser = webdriver.Chrome(service=service, seleniumwire_options=self.options, options=self.chrome_options)
