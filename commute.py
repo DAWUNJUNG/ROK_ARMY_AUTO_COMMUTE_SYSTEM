@@ -1,8 +1,7 @@
 import dotenv
 from dotenv import find_dotenv, load_dotenv
 import os
-from selenium import webdriver
-# from seleniumwire import webdriver
+from seleniumwire import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
 from datetime import datetime, timedelta
