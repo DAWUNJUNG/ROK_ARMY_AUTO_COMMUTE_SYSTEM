@@ -35,6 +35,7 @@ class AutoCommute:
         self.chrome_options = Options()
         self.chrome_options.add_argument('--headless=new')
         self.chrome_options.add_argument('--no-sandbox')
+        self.chrome_options.add_argument('--disable-dev-shm-usage')
         self.chrome_options.add_argument('--window-size=1920x1080')
         self.chrome_options.add_argument('--ignore-certificate-errors')  # SSL 관련 오류 무시
         self.chrome_options.add_argument('--ignore-ssl-errors')  # SSL 관련 오류 무시
