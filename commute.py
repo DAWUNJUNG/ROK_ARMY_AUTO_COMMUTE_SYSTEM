@@ -1,8 +1,8 @@
 import dotenv
 from dotenv import find_dotenv, load_dotenv
 import os
-from seleniumwire import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium import webdriver
+# from seleniumwire import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
 from datetime import datetime, timedelta
@@ -11,8 +11,6 @@ import json
 import smtplib
 from email.mime.text import MIMEText
 import traceback
-import chromedriver_autoinstaller
-
 
 class AutoCommute:
 
@@ -53,8 +51,7 @@ class AutoCommute:
                             encoding="UTF-8")
 
         # 설정 정보 할당
-        service = Service(executable_path=r'./chromedriver')
-        self.browser = webdriver.Chrome(service=service, seleniumwire_options=self.options, options=self.chrome_options)
+        self.browser = webdriver.Chrome(seleniumwire_options=self.options, options=self.chrome_options)
         self.log("근태 기록 자동화 시작\n" +
                  f"프로세스 시작 시간 : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n" +
                  "Made By Dawun (github : https://github.com/DAWUNJUNG)\n")
