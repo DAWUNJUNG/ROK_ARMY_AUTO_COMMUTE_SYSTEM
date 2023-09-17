@@ -1,9 +1,7 @@
 import dotenv
 from dotenv import find_dotenv, load_dotenv
 import os
-from seleniumwire import webdriver as wired_webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
+from seleniumwire import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
 from datetime import datetime, timedelta
@@ -33,7 +31,7 @@ class AutoCommute:
         }
 
         # 크로미움 설정
-        self.chrome_options = Options()
+        self.chrome_options = webdriver.ChromeOptions()
         self.chrome_options.add_argument('--headless')
         self.chrome_options.add_argument('--no-sandbox')
         self.chrome_options.add_argument("--disable-setuid-sandbox")
@@ -52,7 +50,8 @@ class AutoCommute:
                             encoding="UTF-8")
 
         # 설정 정보 할당
-        self.browser = wired_webdriver.Chrome(seleniumwire_options=self.options, chrome_options=self.chrome_options)
+        webdriver.ChromeOptions()
+        self.browser = webdriver.Chrome(seleniumwire_options=self.options, options=self.chrome_options)
         self.log("근태 기록 자동화 시작\n" +
                  f"프로세스 시작 시간 : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n" +
                  "Made By Dawun (github : https://github.com/DAWUNJUNG)\n")
