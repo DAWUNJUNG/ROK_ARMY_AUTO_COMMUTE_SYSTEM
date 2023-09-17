@@ -272,7 +272,7 @@ class AutoCommute:
                 self.log(f"출근 기록 메시지 : {alert_text}\n")
                 if '하시겠습니까?' in alert_text:
                     result_status = "출근 처리 완료"
-                # alert.accept()
+                alert.accept()
                 self.browser.implicitly_wait(100)
             elif commute_type == 'home':
                 self.log("퇴근\n")
@@ -282,7 +282,7 @@ class AutoCommute:
                 self.log(f"퇴근 기록 메시지 : {alert_text}\n")
                 if '하시겠습니까?' in alert_text:
                     result_status = "퇴근 처리 완료"
-                # alert.accept()
+                alert.accept()
                 self.browser.implicitly_wait(100)
 
             self.log(f"근태 기록 결과 : {result_status}\n")
