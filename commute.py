@@ -50,7 +50,6 @@ class AutoCommute:
                             encoding="UTF-8")
 
         # 설정 정보 할당
-        webdriver.ChromeOptions()
         self.browser = webdriver.Chrome(seleniumwire_options=self.options, options=self.chrome_options)
         self.log("근태 기록 자동화 시작\n" +
                  f"프로세스 시작 시간 : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n" +
