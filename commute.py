@@ -10,6 +10,7 @@ import json
 import smtplib
 from email.mime.text import MIMEText
 import traceback
+import chromedriver_autoinstaller
 
 
 class AutoCommute:
@@ -34,6 +35,7 @@ class AutoCommute:
         self.chrome_options = webdriver.ChromeOptions()
         self.chrome_options.add_argument('--headless')
         self.chrome_options.add_argument('--no-sandbox')
+        self.chrome_options.add_argument("--disable-gpu")
         self.chrome_options.add_argument("--disable-setuid-sandbox")
         self.chrome_options.add_argument('--disable-dev-shm-usage')
         self.chrome_options.add_argument("--remote-debugging-port=9222")
@@ -48,6 +50,9 @@ class AutoCommute:
             os.makedirs(log_dir)
         self.logfile = open(log_dir + '/' + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a',
                             encoding="UTF-8")
+
+        # 크롬 설치
+        chromedriver_autoinstaller.install()
 
         # 설정 정보 할당
         self.browser = webdriver.Chrome(seleniumwire_options=self.options, options=self.chrome_options)
