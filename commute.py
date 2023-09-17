@@ -1,18 +1,15 @@
 import dotenv
 from dotenv import find_dotenv, load_dotenv
 import os
-from selenium import webdriver
 from seleniumwire import webdriver as wired_webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
 from datetime import datetime, timedelta
 import requests
 import json
 import smtplib
 from email.mime.text import MIMEText
-import chromedriver_autoinstaller
 import traceback
 
 
@@ -35,14 +32,13 @@ class AutoCommute:
         }
 
         # 크로미움 설정
-        self.chrome_options = webdriver.ChromeOptions()
-        self.chrome_options.add_argument('headless')
+        self.chrome_options = Options()
+        self.chrome_options.add_argument('--headless=new')
         self.chrome_options.add_argument('--no-sandbox')
-        self.chrome_options.add_argument('window-size=1920x1080')
-        self.chrome_options.add_argument("disable-gpu")
-        self.chrome_options.add_argument('lang=ko_KR')
-        self.chrome_options.add_argument('ignore-certificate-errors')  # SSL 관련 오류 무시
-        self.chrome_options.add_argument('ignore-ssl-errors')  # SSL 관련 오류 무시
+        self.chrome_options.add_argument('--window-size=1920x1080')
+        self.chrome_options.add_argument('--ignore-certificate-errors')  # SSL 관련 오류 무시
+        self.chrome_options.add_argument('--ignore-ssl-errors')  # SSL 관련 오류 무시
+        self.chrome_options.add_experimental_option("detach", True)
 
         # 로그 파일 선언
         log_dir = str(os.environ.get('LOG_DIRECTORY')) + datetime.now().strftime('%Y') + '/' + datetime.now().strftime('%m')
@@ -52,7 +48,7 @@ class AutoCommute:
                             encoding="UTF-8")
 
         # 설정 정보 할당
-        self.browser = wired_webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), seleniumwire_options=self.options, chrome_options=self.chrome_options)
+        self.browser = wired_webdriver.Chrome(seleniumwire_options=self.options, chrome_options=self.chrome_options)
         self.log("근태 기록 자동화 시작\n" +
                  f"프로세스 시작 시간 : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n" +
                  "Made By Dawun (github : https://github.com/DAWUNJUNG)\n")
@@ -276,7 +272,7 @@ class AutoCommute:
                 self.log(f"출근 기록 메시지 : {alert_text}\n")
                 if '하시겠습니까?' in alert_text:
                     result_status = "출근 처리 완료"
-                alert.accept()
+                # alert.accept()
                 self.browser.implicitly_wait(100)
             elif commute_type == 'home':
                 self.log("퇴근\n")
@@ -286,7 +282,7 @@ class AutoCommute:
                 self.log(f"퇴근 기록 메시지 : {alert_text}\n")
                 if '하시겠습니까?' in alert_text:
                     result_status = "퇴근 처리 완료"
-                alert.accept()
+                # alert.accept()
                 self.browser.implicitly_wait(100)
 
             self.log(f"근태 기록 결과 : {result_status}\n")
