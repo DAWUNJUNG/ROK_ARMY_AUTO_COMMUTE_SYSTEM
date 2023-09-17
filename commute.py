@@ -52,11 +52,8 @@ class AutoCommute:
         self.logfile = open(log_dir + '/' + datetime.now().strftime('%Y-%m-%d') + '.txt', 'a',
                             encoding="UTF-8")
 
-        # 크롬 설치
-        service = Service(executable_path='./chromedriver')
-
         # 설정 정보 할당
-        self.browser = webdriver.Chrome(service=service, seleniumwire_options=self.options, options=self.chrome_options)
+        self.browser = webdriver.Chrome('./chromedriver', seleniumwire_options=self.options, options=self.chrome_options)
         self.log("근태 기록 자동화 시작\n" +
                  f"프로세스 시작 시간 : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n" +
                  "Made By Dawun (github : https://github.com/DAWUNJUNG)\n")
