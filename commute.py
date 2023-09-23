@@ -195,12 +195,16 @@ class AutoCommute:
             now_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             now_date = datetime.strptime(now_datetime, '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d')
             now_time = datetime.strptime(now_datetime, '%Y-%m-%d %H:%M:%S').strftime('%H:%M:%S')
-            if not now_date in self.holiday_list:
+
+            if datetime.now().weekday() in [5, 6]:
+                self.log("근무 타입 : 휴무일\n")
+            elif not now_date in self.holiday_list:
                 self.log("근무 타입 : 근무일\n")
 
                 # 출퇴근시간 타입 구분
                 go_work_time = datetime.now().strptime('10:00:00', '%H:%M:%S').strftime('%H:%M:%S')
                 go_home_time = datetime.now().strptime('19:00:00', '%H:%M:%S').strftime('%H:%M:%S')
+
 
                 if end_work_time == '':
                     if now_time < go_work_time:
