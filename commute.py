@@ -36,11 +36,7 @@ class AutoCommute:
         self.chrome_options.add_argument('headless')
         self.chrome_options.add_argument('--no-sandbox')
         self.chrome_options.add_argument('--disable-dev-shm-usage')
-        self.chrome_options.add_argument("--remote-debugging-port=9222")
-        self.chrome_options.add_argument('--start-maximized')
         self.chrome_options.add_argument('--disable-gpu')
-        self.chrome_options.add_argument('--disable-popup-blocking')
-        self.chrome_options.add_argument("--incognito")
         self.chrome_options.add_argument('ignore-certificate-errors')  # SSL 관련 오류 무시
         self.chrome_options.add_argument('ignore-ssl-errors')  # SSL 관련 오류 무시
         self.chrome_options.add_experimental_option("detach", True)
