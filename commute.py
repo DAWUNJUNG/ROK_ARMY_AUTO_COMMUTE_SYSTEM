@@ -33,8 +33,8 @@ class AutoCommute:
 
         # 크로미움 설정
         self.chrome_options = webdriver.ChromeOptions()
-        self.chrome_options.add_argument('headless')
-        self.chrome_options.add_argument('--no-sandbox')
+        # self.chrome_options.add_argument('headless')
+        # self.chrome_options.add_argument('--no-sandbox')
         self.chrome_options.add_argument('--disable-dev-shm-usage')
         self.chrome_options.add_argument('--disable-gpu')
         self.chrome_options.add_argument('ignore-certificate-errors')  # SSL 관련 오류 무시
@@ -203,12 +203,13 @@ class AutoCommute:
 
                 # 출퇴근시간 타입 구분
                 go_work_time = datetime.now().strptime('10:00:00', '%H:%M:%S').strftime('%H:%M:%S')
+                go_work_time_limit = datetime.now().strptime('09:40:00', '%H:%M:%S').strftime('%H:%M:%S')
                 go_home_time = datetime.now().strptime('19:00:00', '%H:%M:%S').strftime('%H:%M:%S')
-                go_home_limit_time = datetime.now().strptime('20:00:00', '%H:%M:%S').strftime('%H:%M:%S')
+                go_home_limit_time = datetime.now().strptime('19:20:00', '%H:%M:%S').strftime('%H:%M:%S')
 
 
                 if end_work_time == '':
-                    if now_time < go_work_time:
+                    if go_work_time_limit < now_time < go_work_time:
                         return 'office'
                     elif go_home_time < now_time < go_home_limit_time:
                         return 'home'
