@@ -59,7 +59,7 @@ class AutoCommute:
             self.log("KTbizmeka 휴가 정보 불러오기 시작 \n")
             # 비즈메카 열기
             self.browser.get('https://ezsso.bizmeka.com/loginForm.do')
-            self.browser.implicitly_wait(100)
+            self.browser.implicitly_wait(300)
 
             # 인증 쿠키 유지설정
             self.browser.add_cookie({
@@ -72,7 +72,7 @@ class AutoCommute:
             self.browser.find_element(By.ID, 'username').send_keys(os.environ.get('KT_BIZMEKA_ID'))
             self.browser.find_element(By.ID, 'password').send_keys(os.environ.get('KT_BIZMEKA_PW'))
             self.browser.find_element(By.ID, 'btnSubmit').click()
-            self.browser.implicitly_wait(100)
+            self.browser.implicitly_wait(300)
 
             # 비밀번호 변경 페이지 이동시 비밀번호 변경
             if self.browser.current_url == "https://ezsso.bizmeka.com/rule/updatePasswordView.do":
@@ -81,7 +81,7 @@ class AutoCommute:
                 self.browser.find_element(By.ID, 'password').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
                 self.browser.find_element(By.ID, 'passwordAgain').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
                 self.browser.find_element(By.ID, 'submitBtn').click()
-                request = self.browser.wait_for_request('.*/updatePassword.*', timeout=100)
+                request = self.browser.wait_for_request('.*/updatePassword.*', timeout=300)
                 if request.response.status_code == 200:
                     alert = Alert(self.browser)
                     alert.accept()
@@ -90,7 +90,7 @@ class AutoCommute:
                     dotenv.set_key(find_dotenv(), "KT_BIZMEKA_PW", os.environ.get('KT_BIZMEKA_PW_CHANGE'))
                     dotenv.set_key(find_dotenv(), "KT_BIZMEKA_PW_CHANGE", old_pw)
                     self.log("이전 비밀번호와 변경 대상 비밀번호 env 수정 완료 \n")
-                    self.browser.implicitly_wait(100)
+                    self.browser.implicitly_wait(300)
         except Exception as e:
             self.log("\n=============================\n")
             self.log("bizmeka_login 동작 중 오류\n")
@@ -102,9 +102,9 @@ class AutoCommute:
         try:
             # 비즈메카 휴가신청 이동
             self.browser.get('https://ezkhuman.bizmeka.com/product/outlnk.do?code=PA02')
-            self.browser.implicitly_wait(100)
+            self.browser.implicitly_wait(300)
 
-            request = self.browser.wait_for_request('.*/getApplVctnList.*', timeout=100)
+            request = self.browser.wait_for_request('.*/getApplVctnList.*', timeout=300)
             request_data = json.loads(request.response.body.decode('utf-8'))
 
             not_approval_list = ["3", "4", "5", "6"]
@@ -138,7 +138,7 @@ class AutoCommute:
                         self.holiday_list[end_date] = {
                             "type": "afternoon"
                         }
-            self.browser.implicitly_wait(100)
+            self.browser.implicitly_wait(300)
             self.log("KTbizmeka 휴가 정보 불러오기 종료 \n")
         except Exception as e:
             self.log("\n=============================\n")
@@ -259,7 +259,7 @@ class AutoCommute:
 
             # 비즈메카 근태관리 이동
             self.browser.get('https://ezkhuman.bizmeka.com/product/outlnk.do?code=PJ02')
-            request = self.browser.wait_for_request('.*/getOnedayGolvwkMngPersList.*', timeout=100)
+            request = self.browser.wait_for_request('.*/getOnedayGolvwkMngPersList.*', timeout=300)
             request_data = json.loads(request.response.body.decode('utf-8'))
             if not request_data:
                 self.log("***근태 관리 접근 실패***\n")
@@ -281,7 +281,7 @@ class AutoCommute:
                 if '하시겠습니까?' in alert_text:
                     result_status = "출근 처리 완료"
                 alert.accept()
-                self.browser.implicitly_wait(100)
+                self.browser.implicitly_wait(300)
             elif commute_type == 'home':
                 self.log("퇴근\n")
                 self.browser.find_element(By.ID, 'btnGoHome').click()
@@ -291,7 +291,7 @@ class AutoCommute:
                 if '하시겠습니까?' in alert_text:
                     result_status = "퇴근 처리 완료"
                 alert.accept()
-                self.browser.implicitly_wait(100)
+                self.browser.implicitly_wait(300)
 
             self.log(f"근태 기록 결과 : {result_status}\n")
             self.log("근태 기록 종료\n")
