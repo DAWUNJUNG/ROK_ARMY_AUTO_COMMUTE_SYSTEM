@@ -33,7 +33,7 @@ class AutoCommute:
 
         # 크로미움 설정
         self.chrome_options = webdriver.ChromeOptions()
-        self.chrome_options.add_argument('headless')
+        # self.chrome_options.add_argument('headless')
         self.chrome_options.add_argument('--no-sandbox')
         self.chrome_options.add_argument('--disable-dev-shm-usage')
         self.chrome_options.add_argument('--disable-gpu')
@@ -49,7 +49,8 @@ class AutoCommute:
                             encoding="UTF-8")
 
         # 크롬 드라이버 설치 및 설정 정보 할당
-        self.browser = webdriver.Chrome(service=Service(), seleniumwire_options=self.options, options=self.chrome_options)
+        service = Service(ChromeDriverManager().install())
+        self.browser = webdriver.Chrome(service=Service(service), seleniumwire_options=self.options, options=self.chrome_options)
         self.log("근태 기록 자동화 시작\n" +
                  f"프로세스 시작 시간 : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n" +
                  "Made By Dawun (github : https://github.com/DAWUNJUNG)\n")
