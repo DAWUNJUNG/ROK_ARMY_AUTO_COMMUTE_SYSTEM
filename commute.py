@@ -80,7 +80,7 @@ class AutoCommute:
                 self.browser.find_element(By.ID, 'passwordOld').send_keys(os.environ.get('KT_BIZMEKA_PW'))
                 self.browser.find_element(By.ID, 'password').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
                 self.browser.find_element(By.ID, 'passwordAgain').send_keys(os.environ.get('KT_BIZMEKA_PW_CHANGE'))
-                self.browser.find_element(By.ID, 'submitBtn').click()
+                self.browser.find_element(By.ID, 'ruleForm').submit()
                 request = self.browser.wait_for_request('.*/updatePassword.*', timeout=300)
                 if request.response.status_code == 200:
                     alert = Alert(self.browser)
