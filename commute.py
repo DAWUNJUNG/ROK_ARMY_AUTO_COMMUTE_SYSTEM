@@ -12,10 +12,14 @@ import json
 import smtplib
 from email.mime.text import MIMEText
 import traceback
+from pyvirtualdisplay import Display
 
 class AutoCommute:
 
     def __init__(self):
+        display = Display(visible=0, size=(1920, 1080))
+        display.start()
+
         # 로그 메시지 초기 선언
         self.log_message = ''
 
