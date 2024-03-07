@@ -21,3 +21,5 @@
 .env
 
 /log
+
+.python-version
