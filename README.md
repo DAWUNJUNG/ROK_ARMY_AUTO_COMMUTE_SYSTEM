@@ -10,7 +10,7 @@
     
     Use Technology : 
             - Language :
-                        Python 3.7 이상
+                        Python 3.10 이상
             - Package :
                         dotenv
                         selenium
